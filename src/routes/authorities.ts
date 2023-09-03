@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get('/:authorityId(\\d+)', async (req, res, next) => {
   const authorityIdSchema = joi.number().integer().positive().required();
-  const query = authorityIdSchema.validate(req.params.authorityId);
+  const query = authorityIdSchema.validate((req.params as any)['authorityId']);
   if (query.error) {
     next(createError(400));
     return;
