@@ -1,7 +1,6 @@
 import { EntityRepository, AbstractRepository, SelectQueryBuilder } from 'typeorm';
 
 import { Inquest } from '../models/Inquest';
-import { escapeRegex, getConcatExpression } from '../utils/sql';
 import { InquestQuery, Sort } from '../utils/query';
 
 @EntityRepository(Inquest)
@@ -52,45 +51,20 @@ export class InquestRepository extends AbstractRepository<Inquest> {
   }
 
   private addTextSearch(query: SelectQueryBuilder<Inquest>, text: string) {
-    const terms = text.split(/\s+/).filter((term) => term);
-    if (terms.length) {
-      const searchTextSubQuery = query
+    if (text.length) {
+      const subQuery = query
         .subQuery()
         .addSelect('inquest.inquestId')
-        .addSelect('inquest.name')
-        .addSelect('inquest.tags')
-        .addSelect('deceased.lastName')
-        .addSelect('deceased.givenNames')
-        .addSelect('deathCause.name')
         .from('inquest', 'inquest')
         .innerJoin('inquest.deceased', 'deceased')
         .innerJoin('deceased.deathCauseModel', 'deathCause')
-        .leftJoin('inquest.inquestKeywords', 'keywords')
-        .addGroupBy('inquest.inquestId')
-        .addGroupBy('deceased.deceasedId');
-      terms.forEach((term, i) => {
-        // For each search term, ensure at least 1 of several columns contains that term.
-        // Match the start of the string or a non-word character followed by the search term.
-        const regex = `(^|[^A-Za-z0-9])${escapeRegex(term)}`;
-        searchTextSubQuery.andHaving(
-          `${getConcatExpression([
-            'inquest.name',
-            'inquest.tags',
-            'deceased.lastName',
-            'deceased.givenNames',
-            'deathCause.name',
-            "GROUP_CONCAT(keywords.name SEPARATOR ' ')",
-            "GROUP_CONCAT(keywords.synonyms SEPARATOR ' ')",
-          ])} REGEXP :regexp${i}`,
-          { [`regexp${i}`]: regex }
-        );
-      });
-      // Extract inquest IDs from previous sub-query.
-      const inquestIdSubQuery = query
-        .subQuery()
-        .select('inquest_inquestId')
-        .from(searchTextSubQuery.getQuery(), 'searchTextSubQuery');
-      query.andWhere(`inquest.inquestId IN ${inquestIdSubQuery.getQuery()}`);
+        // Ensure at least 1 of several columns contains the search term.
+        .where('inquest.name = :text', { text })
+        .orWhere('deceased.lastName = :text', { text })
+        .orWhere('deceased.givenNames = :text', { text })
+        .orWhere('deathCause.name = :text', { text })
+        .getQuery();
+      query.andWhere(`inquest.inquestId IN ${subQuery}`);
     }
   }
 

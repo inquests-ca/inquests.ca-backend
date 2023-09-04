@@ -1,7 +1,6 @@
 import { EntityRepository, AbstractRepository, SelectQueryBuilder } from 'typeorm';
 
 import { Authority } from '../models/Authority';
-import { escapeRegex, getConcatExpression } from '../utils/sql';
 import { AuthorityQuery, Sort } from '../utils/query';
 
 @EntityRepository(Authority)
@@ -51,44 +50,21 @@ export class AuthorityRepository extends AbstractRepository<Authority> {
   }
 
   private addTextSearch(query: SelectQueryBuilder<Authority>, text: string) {
-    const terms = text.split(/\s+/).filter((term) => term);
-    if (terms.length) {
-      const searchTextSubQuery = query
+    if (text.length) {
+      const subQuery = query
         .subQuery()
         .addSelect('authority.authorityId')
-        .addSelect('authority.name') // TODO: remove?
-        .addSelect('authority.tags')
-        .addSelect('primaryDocument.citation')
         .from('authority', 'authority')
         .innerJoin(
           'authority.authorityDocuments',
           'primaryDocument',
           'primaryDocument.isPrimary = 1'
         )
-        .leftJoin('authority.authorityKeywords', 'keywords')
-        .addGroupBy('authority.authorityId')
-        .addGroupBy('primaryDocument.authorityDocumentId');
-      terms.forEach((term, i) => {
-        // For each search term, ensure at least 1 of several columns contains that term.
-        // Match the start of the string or a non-word character followed by the search term.
-        const regex = `(^|[^A-Za-z0-9])${escapeRegex(term)}`;
-        searchTextSubQuery.andHaving(
-          `${getConcatExpression([
-            'authority.name',
-            'authority.tags',
-            'primaryDocument.citation',
-            "GROUP_CONCAT(keywords.name SEPARATOR ' ')",
-            "GROUP_CONCAT(keywords.synonyms SEPARATOR ' ')",
-          ])} REGEXP :regexp${i}`,
-          { [`regexp${i}`]: regex }
-        );
-      });
-      // Extract authority IDs from previous sub-query.
-      const authorityIdSubQuery = query
-        .subQuery()
-        .select('authority_authorityId')
-        .from(searchTextSubQuery.getQuery(), 'searchTextSubQuery');
-      query.andWhere(`authority.authorityId IN ${authorityIdSubQuery.getQuery()}`);
+        // Ensure at least 1 of several columns contains the search term.
+        .where('authority.name = :text', { text })
+        .orWhere('primaryDocument.citation = :text', { text })
+        .getQuery();
+      query.andWhere(`authority.authorityId IN ${subQuery}`);
     }
   }
 
