@@ -11,7 +11,7 @@ export class InquestRepository extends AbstractRepository<Inquest> {
       .innerJoinAndSelect('inquest.jurisdiction', 'jurisdiction')
       .innerJoinAndSelect('inquest.deceased', 'deceased')
       .innerJoinAndSelect('deceased.deathManner', 'deathManner')
-      .innerJoinAndSelect('deceased.inquestType', 'inquestType')
+      .innerJoinAndSelect('deceased.inquestReason', 'inquestReason')
       .innerJoinAndSelect('inquest.inquestDocuments', 'documents')
       .leftJoinAndSelect('documents.inquestDocumentLinks', 'documentLinks')
       .leftJoinAndSelect('documentLinks.documentSource', 'documentSource')
@@ -34,7 +34,7 @@ export class InquestRepository extends AbstractRepository<Inquest> {
       .innerJoinAndSelect('inquest.jurisdiction', 'jurisdiction')
       .innerJoinAndSelect('inquest.deceased', 'deceased')
       .innerJoinAndSelect('deceased.deathManner', 'deathManner')
-      .innerJoinAndSelect('deceased.inquestType', 'inquestType')
+      .innerJoinAndSelect('deceased.inquestReason', 'inquestReason')
       .take(limit)
       .skip(offset);
 
@@ -58,6 +58,7 @@ export class InquestRepository extends AbstractRepository<Inquest> {
         .subQuery()
         .addSelect('inquest.inquestId')
         .addSelect('inquest.name')
+        .addSelect('inquest.tags')
         .addSelect('deceased.lastName')
         .addSelect('deceased.givenNames')
         .addSelect('deathCause.name')
@@ -65,8 +66,6 @@ export class InquestRepository extends AbstractRepository<Inquest> {
         .innerJoin('inquest.deceased', 'deceased')
         .innerJoin('deceased.deathCauseModel', 'deathCause')
         .leftJoin('inquest.inquestKeywords', 'keywords')
-        .leftJoin('keywords.inquestKeywordSynonyms', 'synonyms')
-        .leftJoin('inquest.inquestTags', 'tags')
         .addGroupBy('inquest.inquestId')
         .addGroupBy('deceased.deceasedId');
       terms.forEach((term, i) => {
@@ -76,12 +75,12 @@ export class InquestRepository extends AbstractRepository<Inquest> {
         searchTextSubQuery.andHaving(
           `${getConcatExpression([
             'inquest.name',
+            'inquest.tags',
             'deceased.lastName',
             'deceased.givenNames',
             'deathCause.name',
             "GROUP_CONCAT(keywords.name SEPARATOR ' ')",
-            "GROUP_CONCAT(synonyms.synonym SEPARATOR ' ')",
-            "GROUP_CONCAT(tags.tag SEPARATOR ' ')",
+            "GROUP_CONCAT(keywords.synonyms SEPARATOR ' ')",
           ])} REGEXP :regexp${i}`,
           { [`regexp${i}`]: regex }
         );

@@ -12,8 +12,8 @@ export class Source extends BaseEntity {
   @Column('varchar', { length: 255 })
   name!: string;
 
-  @Column('varchar', { nullable: true, length: 255 })
-  code!: string | null;
+  @Column('varchar', { length: 255 })
+  code!: string;
 
   @Column('int', { unsigned: true })
   rank!: number;

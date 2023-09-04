@@ -15,8 +15,6 @@ export class AuthorityRepository extends AbstractRepository<Authority> {
       .leftJoinAndSelect('authority.authorityCitations', 'authorityCitations')
       .leftJoinAndSelect('authority.authorityCitedBy', 'authorityCitedBy')
       .leftJoinAndSelect('authority.authorityRelated', 'authorityRelated')
-      .leftJoinAndSelect('authority.authoritySuperceded', 'authoritySuperceded')
-      .leftJoinAndSelect('authority.authoritySupercededBy', 'authoritySupercededBy')
       .leftJoinAndSelect('authority.inquests', 'inquests')
       .where('authority.authorityId = :authorityId', { authorityId })
       .getOne();
@@ -58,7 +56,8 @@ export class AuthorityRepository extends AbstractRepository<Authority> {
       const searchTextSubQuery = query
         .subQuery()
         .addSelect('authority.authorityId')
-        .addSelect('authority.name')
+        .addSelect('authority.name') // TODO: remove?
+        .addSelect('authority.tags')
         .addSelect('primaryDocument.citation')
         .from('authority', 'authority')
         .innerJoin(
@@ -67,8 +66,6 @@ export class AuthorityRepository extends AbstractRepository<Authority> {
           'primaryDocument.isPrimary = 1'
         )
         .leftJoin('authority.authorityKeywords', 'keywords')
-        .leftJoin('keywords.authorityKeywordSynonyms', 'synonyms')
-        .leftJoin('authority.authorityTags', 'tags')
         .addGroupBy('authority.authorityId')
         .addGroupBy('primaryDocument.authorityDocumentId');
       terms.forEach((term, i) => {
@@ -78,10 +75,10 @@ export class AuthorityRepository extends AbstractRepository<Authority> {
         searchTextSubQuery.andHaving(
           `${getConcatExpression([
             'authority.name',
+            'authority.tags',
             'primaryDocument.citation',
             "GROUP_CONCAT(keywords.name SEPARATOR ' ')",
-            "GROUP_CONCAT(synonyms.synonym SEPARATOR ' ')",
-            "GROUP_CONCAT(tags.tag SEPARATOR ' ')",
+            "GROUP_CONCAT(keywords.synonyms SEPARATOR ' ')",
           ])} REGEXP :regexp${i}`,
           { [`regexp${i}`]: regex }
         );

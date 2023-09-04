@@ -14,7 +14,6 @@ import { Deceased } from './Deceased';
 import { Jurisdiction } from './Jurisdiction';
 import { InquestDocument } from './InquestDocument';
 import { InquestKeyword } from './InquestKeyword';
-import { InquestTags } from './InquestTags';
 
 @Entity('inquest')
 export class Inquest extends BaseEntity {
@@ -23,6 +22,9 @@ export class Inquest extends BaseEntity {
 
   @Column('char', { length: 100 })
   jurisdictionId!: string;
+
+  @Column('varchar', { nullable: true, length: 255 })
+  location!: string | null;
 
   @Column('tinyint', { unsigned: true })
   isPrimary!: boolean;
@@ -48,14 +50,17 @@ export class Inquest extends BaseEntity {
   @Column('date', { nullable: true })
   end!: string | null;
 
-  @Column('int', { nullable: true })
+  @Column('int', { nullable: true, unsigned: true })
   sittingDays!: number | null;
 
-  @Column('int', { nullable: true })
+  @Column('int', { nullable: true, unsigned: true })
   exhibits!: number | null;
 
+  @Column('int', { nullable: true, unsigned: true })
+  recommendations!: number | null;
+
   @Column('varchar', { nullable: true, length: 1000 })
-  remarks!: string | null;
+  tags!: string | null;
 
   @ManyToMany(() => Authority, (authority) => authority.inquests)
   authorities!: Authority[];
@@ -77,7 +82,4 @@ export class Inquest extends BaseEntity {
     inverseJoinColumn: { name: 'inquestKeywordId', referencedColumnName: 'inquestKeywordId' },
   })
   inquestKeywords!: InquestKeyword[];
-
-  @OneToMany(() => InquestTags, (inquestTag) => inquestTag.inquest)
-  inquestTags!: InquestTags[];
 }

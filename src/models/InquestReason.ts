@@ -1,9 +1,9 @@
 import { Column, Entity, BaseEntity, PrimaryColumn } from 'typeorm';
 
-@Entity('inquestType')
-export class InquestType extends BaseEntity {
+@Entity('inquestReason')
+export class InquestReason extends BaseEntity {
   @PrimaryColumn('char', { length: 100 })
-  inquestTypeId!: string;
+  inquestReasonId!: string;
 
   @Column('varchar', { length: 255 })
   name!: string;

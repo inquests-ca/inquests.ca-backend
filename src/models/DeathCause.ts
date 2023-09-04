@@ -10,4 +10,7 @@ export class DeathCause extends BaseEntity {
 
   @Column('varchar', { nullable: true, length: 1000 })
   description!: string | null;
+
+  @Column('varchar', { nullable: true, length: 1000 })
+  synonyms!: string | null;
 }

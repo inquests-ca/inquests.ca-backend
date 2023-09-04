@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get('/:inquestId(\\d+)', async (req, res, next) => {
   const inquestIdValidation = joi.number().integer().positive().required();
-  const query = inquestIdValidation.validate(req.params.inquestId);
+  const query = inquestIdValidation.validate((req.params as any)['inquestId']);
   if (query.error) {
     next(createError(400));
     return;
