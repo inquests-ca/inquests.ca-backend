@@ -1,6 +1,6 @@
 module.exports = {
-  type: 'mysql',
-  url: process.env.DATABASE_URL,
+  type: 'sqlite',
+  database: process.env.DATABASE_FILE,
   synchronize: false,
   logging: false,
   entities: ['dist/models/**/*.js'],

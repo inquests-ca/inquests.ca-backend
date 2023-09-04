@@ -13,8 +13,8 @@
     "joi": "^17.4.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.1.6",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
