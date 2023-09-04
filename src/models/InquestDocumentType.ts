@@ -2,7 +2,7 @@ import { Column, Entity, BaseEntity, PrimaryColumn } from 'typeorm';
 
 @Entity('inquestDocumentType')
 export class InquestDocumentType extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   inquestDocumentTypeId!: string;
 
   @Column('varchar', { name: 'name', length: 255 })

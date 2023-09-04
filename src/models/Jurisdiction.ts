@@ -10,10 +10,10 @@ import {
 
 @Entity('jurisdiction')
 export class Jurisdiction extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   jurisdictionId!: string;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   federalJurisdictionId!: string;
 
   @Column('varchar', { length: 255 })

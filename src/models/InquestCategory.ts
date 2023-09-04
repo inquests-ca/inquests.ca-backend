@@ -3,7 +3,7 @@ import { InquestKeyword } from './InquestKeyword';
 
 @Entity('inquestCategory')
 export class InquestCategory extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   inquestCategoryId!: string;
 
   @Column('varchar', { unique: true, length: 255 })

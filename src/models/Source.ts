@@ -3,10 +3,10 @@ import { Jurisdiction } from './Jurisdiction';
 
 @Entity('source')
 export class Source extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   sourceId!: string;
 
-  @Column('char', { nullable: true, length: 100 })
+  @Column('varchar', { nullable: true, length: 100 })
   jurisdictionId!: string | null;
 
   @Column('varchar', { length: 255 })

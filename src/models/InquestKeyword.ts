@@ -4,10 +4,10 @@ import { InquestCategory } from './InquestCategory';
 
 @Entity('inquestKeyword')
 export class InquestKeyword extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   inquestKeywordId!: string;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   inquestCategoryId!: string;
 
   @Column('varchar', { unique: true, length: 255 })

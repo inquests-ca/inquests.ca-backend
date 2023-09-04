@@ -2,7 +2,7 @@ import { Column, Entity, BaseEntity, PrimaryColumn } from 'typeorm';
 
 @Entity('authorityDocumentType')
 export class AuthorityDocumentType extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   authorityDocumentTypeId!: string;
 
   @Column('varchar', { length: 255 })

@@ -20,7 +20,7 @@ export class Inquest extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   inquestId!: number;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   jurisdictionId!: string;
 
   @Column('varchar', { nullable: true, length: 255 })

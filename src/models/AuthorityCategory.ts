@@ -3,7 +3,7 @@ import { AuthorityKeyword } from './AuthorityKeyword';
 
 @Entity('authorityCategory')
 export class AuthorityCategory extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   authorityCategoryId!: string;
 
   @Column('varchar', { unique: true, length: 255 })

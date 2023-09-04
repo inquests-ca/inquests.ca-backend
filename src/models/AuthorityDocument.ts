@@ -20,10 +20,10 @@ export class AuthorityDocument extends BaseEntity {
   @Column('int', { unsigned: true })
   authorityId!: number;
 
-  @Column('char', { nullable: true, length: 100 })
+  @Column('varchar', { nullable: true, length: 100 })
   authorityDocumentTypeId!: string | null;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   sourceId!: string;
 
   @Column('tinyint', { unsigned: true })

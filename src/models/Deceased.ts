@@ -13,13 +13,13 @@ export class Deceased extends BaseEntity {
   @Column('int', { unsigned: true })
   inquestId!: number;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   inquestReasonId!: string;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   deathMannerId!: string;
 
-  @Column('char', { length: 100 })
+  @Column('varchar', { length: 100 })
   deathCauseId!: string;
 
   @Column('varchar', { length: 255 })

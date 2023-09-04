@@ -2,7 +2,7 @@ import { Column, Entity, BaseEntity, PrimaryColumn } from 'typeorm';
 
 @Entity('inquestReason')
 export class InquestReason extends BaseEntity {
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   inquestReasonId!: string;
 
   @Column('varchar', { length: 255 })

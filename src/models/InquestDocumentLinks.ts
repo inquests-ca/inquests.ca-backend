@@ -7,7 +7,7 @@ export class InquestDocumentLinks extends BaseEntity {
   @PrimaryColumn('int', { unsigned: true })
   inquestDocumentId!: number;
 
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   documentSourceId!: string;
 
   @Column('varchar', { name: 'link', length: 1000 })

@@ -7,7 +7,7 @@ export class AuthorityDocumentLinks extends BaseEntity {
   @PrimaryColumn('int', { unsigned: true })
   authorityDocumentId!: number;
 
-  @PrimaryColumn('char', { length: 100 })
+  @PrimaryColumn('varchar', { length: 100 })
   documentSourceId!: string;
 
   @Column('varchar', { length: 1000 })

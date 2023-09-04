@@ -19,7 +19,7 @@ export class InquestDocument extends BaseEntity {
   @Column('int', { unsigned: true })
   inquestId!: number;
 
-  @Column('char', { nullable: true, length: 100 })
+  @Column('varchar', { nullable: true, length: 100 })
   inquestDocumentTypeId!: string | null;
 
   @Column('varchar', { length: 255 })
