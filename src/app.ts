@@ -14,7 +14,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
-  const allowedOrigins = ['http://localhost:3000', 'https://inquests.ca'];
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://inquests.ca',
+    'https://d376y34wbubvaq.cloudfront.net',
+  ];
   const origin = Array.isArray(req.headers.origin) ? req.headers.origin[0] : req.headers.origin;
   if (origin && allowedOrigins.indexOf(origin) > -1) res.set('Access-Control-Allow-Origin', origin);
   next();
