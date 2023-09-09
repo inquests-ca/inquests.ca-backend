@@ -8,7 +8,9 @@
     "url": "https://github.com/inquests-ca/inquests.ca-backend.git"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.119",
     "@types/node": "^14.17.4",
+    "@vendia/serverless-express": "^4.10.4",
     "express": "^4.17.1",
     "joi": "^17.4.0",
     "lodash": "^4.17.21",
